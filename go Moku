@@ -1,0 +1,79 @@
+import pygame
+import random
+import sys
+
+# Game settings
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+BACKGROUND_COLOR = (255, 255, 255)
+AD_SPACE_HEIGHT = 50
+
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+
+# Initialize Pygame
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT + AD_SPACE_HEIGHT))
+pygame.display.set_caption("Go Moku Game App")
+
+# Game state
+game_over = False
+current_player = 1
+board = [[0 for _ in range(15)] for _ in range(15)]  # 15x15 game board
+
+# Fonts
+font_small = pygame.font.Font(None, 24)
+font_medium = pygame.font.Font(None, 36)
+font_large = pygame.font.Font(None, 48)
+
+# Advertisement
+ad_space_rect = pygame.Rect(0, SCREEN_HEIGHT, SCREEN_WIDTH, AD_SPACE_HEIGHT)
+ad_show = False
+
+# Google login
+logged_in = False
+
+# Language display
+language = "English"
+
+# Background
+background_image = pygame.image.load("background.jpg")
+
+def draw_board():
+    # Draw game board
+    for row in range(15):
+        for col in range(15):
+            pygame.draw.rect(screen, BLACK, pygame.Rect(col * 40 + 50, row * 40 + 50, 40, 40), 1)
+            if board[row][col] == 1:
+                pygame.draw.circle(screen, BLACK, (col * 40 + 70, row * 40 + 70), 15)
+            elif board[row][col] == 2:
+                pygame.draw.circle(screen, WHITE, (col * 40 + 70, row * 40 + 70), 15)
+
+
+def check_winner():
+    # Check if there is a winner
+    for row in range(15):
+        for col in range(11):
+            if board[row][col] == board[row][col + 1] == board[row][col + 2] == board[row][col + 3] != 0:
+                return board[row][col]
+    for row in range(11):
+        for col in range(15):
+            if board[row][col] == board[row + 1][col] == board[row + 2][col] == board[row + 3][col] != 0:
+                return board[row][col]
+    for row in range(11):
+        for col in range(11):
+            if board[row][col] == board[row + 1][col + 1] == board[row + 2][col + 2] == board[row + 3][col + 3] != 0:
+                return board[row][col]
+    for row in range(11):
+        for col in range(3, 15):
+            if board[row][col] == board[row + 1][col - 1] == board[row + 2][col - 2] == board[row + 3][col - 3] != 0:
+                return board[row][col]
+    return 0
+
+
+def reset_game():
+    global game_over, current_player, board
+    game
